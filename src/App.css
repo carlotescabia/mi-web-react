@@ -1,114 +1,63 @@
-import React, { useState, useRef } from 'react';
-import './App.css';
-import BlurText from './BlurText'; // Importa el componente BlurText
-
-function App() {
-  // --------------------------
-  // 1️⃣ Estado: posición de cada letra
-  // --------------------------
-  const [letterPositions, setLetterPositions] = useState([
-    { x: 0, y: 0 }, // C
-    { x: 0, y: 0 }, // A
-    { x: 0, y: 0 }, // R
-    { x: 0, y: 0 }, // L
-    { x: 0, y: 0 }, // O
-    { x: 0, y: 0 }, // T
-    { x: 0, y: 0 }  // A
-  ]);
-
-  // --------------------------
-  // 2️⃣ Refs: referencias a cada letra
-  // --------------------------
-  const letterRefs = [
-    useRef(), useRef(), useRef(), useRef(),
-    useRef(), useRef(), useRef()
-  ];
-
-  // --------------------------
-  // 3️⃣ Letras a mostrar
-  // --------------------------
-  const letters = ['C', 'A', 'R', 'L', 'O', 'T', 'A'];
-
-  // --------------------------
-  // 4️⃣ Función: mover letras según el cursor
-  // --------------------------
-  const handleMouseMove = (e, letterIndex) => {
-    const letterElement = letterRefs[letterIndex].current;
-    if (!letterElement) return;
-
-    const rect = letterElement.getBoundingClientRect();
-    const letterCenterX = rect.left + rect.width / 2;
-    const letterCenterY = rect.top + rect.height / 2;
-
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
-
-    const deltaX = mouseX - letterCenterX;
-    const deltaY = mouseY - letterCenterY;
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-    if (distance < 150) {
-      const force = (150 - distance) / 150;
-      const moveX = -deltaX * force * 0.8;
-      const moveY = -deltaY * force * 0.8;
-
-      setLetterPositions(prev => {
-        const newPositions = [...prev];
-        newPositions[letterIndex] = { x: moveX, y: moveY };
-        return newPositions;
-      });
-    }
-  };
-
-  // --------------------------
-  // 5️⃣ Función: volver letra a su posición original
-  // --------------------------
-  const handleMouseLeave = (letterIndex) => {
-    setLetterPositions(prev => {
-      const newPositions = [...prev];
-      newPositions[letterIndex] = { x: 0, y: 0 };
-      return newPositions;
-    });
-  };
-
-  // --------------------------
-  // 6️⃣ Callback BlurText
-  // --------------------------
-  const handleAnimationComplete = () => {
-    console.log('Animation completed!');
-  };
-
-  // --------------------------
-  // 7️⃣ Renderizado
-  // --------------------------
-  return (
-    <div
-      className="App"
-      onMouseMove={(e) => {
-        letters.forEach((_, index) => handleMouseMove(e, index));
-      }}
-    >
-      <div className="word-container">
-        {letters.map((letter, index) => (
-          <BlurText
-            key={index}
-            text={letter}                    // Cada letra individual
-            delay={index * 150}              // Retardo progresivo
-            animateBy="letters"
-            direction="top"
-            onAnimationComplete={handleAnimationComplete}
-            className="letter"
-            ref={letterRefs[index]}           // Referencia para movimiento del cursor
-            style={{
-              transform: `translate(${letterPositions[index].x}px, ${letterPositions[index].y}px)`,
-              transition: 'transform 0.3s ease-out'
-            }}
-            threshold={0}                     // Animación siempre al entrar
-          />
-        ))}
-      </div>
-    </div>
-  );
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-export default App;
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Evita scroll si las letras se mueven */
+  cursor: none;     /* Oculta el cursor real */
+  background-color: #002FA7; /* Azul Klein de fondo */
+}
+
+/* Contenedor principal */
+.App {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contenedor de letras */
+.word-container {
+  display: flex;
+  gap: 40px; /* Espacio entre letras */
+}
+
+/* Estilo de las letras */
+.letter {
+  color: #FF6F00; /* Naranja brillante */
+  font-size: 20rem; /* Tamaño gigante */
+  font-weight: bold;
+  font-family: 'Fredoka One', sans-serif; /* Fuente divertida y blob */
+  display: inline-block;
+  user-select: none; /* Evita selección de texto */
+  text-shadow: 
+    0 0 20px rgba(255, 111, 0, 0.6),
+    0 0 40px rgba(255, 111, 0, 0.4),
+    0 0 60px rgba(255, 111, 0, 0.2);
+  transition: all 0.3s ease; /* Suaviza cambios de color y posición */
+}
+
+/* Hover sobre letras */
+.letter:hover {
+  color: #FFA500; /* Naranja más brillante al pasar el mouse */
+  text-shadow: 
+    0 0 30px rgba(255, 165, 0, 0.8),
+    0 0 60px rgba(255, 165, 0, 0.6),
+    0 0 90px rgba(255, 165, 0, 0.4);
+}
+
+/* Cursor blanco de 1px */
+.cursor-dot {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none; /* No interfiere con hover ni clicks */
+  z-index: 9999;
+}
