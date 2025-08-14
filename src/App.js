@@ -1,37 +1,24 @@
 import React, { useState, useRef } from 'react';
 import './App.css';
-import BlurText from './BlurText'; // Importa el componente BlurText
 
 function App() {
-  // --------------------------
-  // 1️⃣ Estado: posición de cada letra
-  // --------------------------
   const [letterPositions, setLetterPositions] = useState([
-    { x: 0, y: 0 }, // C
-    { x: 0, y: 0 }, // A
-    { x: 0, y: 0 }, // R
-    { x: 0, y: 0 }, // L
-    { x: 0, y: 0 }, // O
-    { x: 0, y: 0 }, // T
-    { x: 0, y: 0 }  // A
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+    { x: 0, y: 0 }
   ]);
 
-  // --------------------------
-  // 2️⃣ Refs: referencias a cada letra
-  // --------------------------
   const letterRefs = [
     useRef(), useRef(), useRef(), useRef(),
     useRef(), useRef(), useRef()
   ];
 
-  // --------------------------
-  // 3️⃣ Letras a mostrar
-  // --------------------------
   const letters = ['C', 'A', 'R', 'L', 'O', 'T', 'A'];
 
-  // --------------------------
-  // 4️⃣ Función: mover letras según el cursor
-  // --------------------------
   const handleMouseMove = (e, letterIndex) => {
     const letterElement = letterRefs[letterIndex].current;
     if (!letterElement) return;
@@ -60,9 +47,6 @@ function App() {
     }
   };
 
-  // --------------------------
-  // 5️⃣ Función: volver letra a su posición original
-  // --------------------------
   const handleMouseLeave = (letterIndex) => {
     setLetterPositions(prev => {
       const newPositions = [...prev];
@@ -71,40 +55,25 @@ function App() {
     });
   };
 
-  // --------------------------
-  // 6️⃣ Callback BlurText
-  // --------------------------
-  const handleAnimationComplete = () => {
-    console.log('Animation completed!');
-  };
-
-  // --------------------------
-  // 7️⃣ Renderizado
-  // --------------------------
   return (
     <div
       className="App"
-      onMouseMove={(e) => {
-        letters.forEach((_, index) => handleMouseMove(e, index));
-      }}
+      onMouseMove={(e) => letters.forEach((_, i) => handleMouseMove(e, i))}
     >
       <div className="word-container">
         {letters.map((letter, index) => (
-          <BlurText
+          <span
             key={index}
-            text={letter}                    // Cada letra individual
-            delay={index * 150}              // Retardo progresivo
-            animateBy="letters"
-            direction="top"
-            onAnimationComplete={handleAnimationComplete}
+            ref={letterRefs[index]}
             className="letter"
-            ref={letterRefs[index]}           // Referencia para movimiento del cursor
             style={{
               transform: `translate(${letterPositions[index].x}px, ${letterPositions[index].y}px)`,
               transition: 'transform 0.3s ease-out'
             }}
-            threshold={0}                     // Animación siempre al entrar
-          />
+            onMouseLeave={() => handleMouseLeave(index)}
+          >
+            {letter}
+          </span>
         ))}
       </div>
     </div>
