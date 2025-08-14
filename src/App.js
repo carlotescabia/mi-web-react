@@ -53,9 +53,9 @@ function App() {
 
     // Si el cursor está cerca (menos de 150px), mover la letra
     if (distance < 150) {
-      const force = (150 - distance) / 250; // Más cerca = más fuerza
-      const moveX = -deltaX * force * 1.4;  // Mover en dirección opuesta
-      const moveY = -deltaY * force * 1.0;
+      const force = (150 - distance) / 150; // Más cerca = más fuerza
+      const moveX = -deltaX * force * 0.8;  // Mover en dirección opuesta
+      const moveY = -deltaY * force * 0.8;
 
       // Actualiza el estado para que React re-renderice la letra en la nueva posición
       setLetterPositions(prev => {
