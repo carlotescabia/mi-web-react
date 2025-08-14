@@ -107,7 +107,7 @@ function App() {
             <span
               key={index}
               ref={letterRefs[index]}
-              className={`letter ${showTodoSection && letter === 'L' ? 'active-letter' : ''}`}
+              className={`letter ${showTodoSection && letter === 'C' ? 'active-letter' : ''}`}
               style={{
                 transform: `translate(${letterPositions[index].x}px, ${letterPositions[index].y}px)`,
                 transition: 'transform 0.3s ease-out, color 0.5s ease'
