@@ -1,4 +1,3 @@
-/* Reset básico */
 * {
   margin: 0;
   padding: 0;
@@ -8,12 +7,11 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Evita scroll si las letras se mueven */
-  cursor: none;     /* Oculta el cursor real */
-  background-color: #002FA7; /* Azul Klein de fondo */
+  overflow: hidden;
+  cursor: none;
+  background-color: #002FA7;
 }
 
-/* Contenedor principal */
 .App {
   min-height: 100vh;
   display: flex;
@@ -21,43 +19,39 @@ body {
   align-items: center;
 }
 
-/* Contenedor de letras */
 .word-container {
   display: flex;
-  gap: 40px; /* Espacio entre letras */
+  gap: 40px;
 }
 
-/* Estilo de las letras */
 .letter {
-  color: #FF6F00; /* Naranja brillante */
-  font-size: 20rem; /* Tamaño gigante */
+  color: #FF6F00;
+  font-size: 20rem;
   font-weight: bold;
-  font-family: 'Fredoka One', sans-serif; /* Fuente divertida y blob */
+  font-family: 'Fredoka One', sans-serif;
   display: inline-block;
-  user-select: none; /* Evita selección de texto */
+  user-select: none;
   text-shadow: 
     0 0 20px rgba(255, 111, 0, 0.6),
     0 0 40px rgba(255, 111, 0, 0.4),
     0 0 60px rgba(255, 111, 0, 0.2);
-  transition: all 0.3s ease; /* Suaviza cambios de color y posición */
+  transition: all 0.3s ease;
 }
 
-/* Hover sobre letras */
 .letter:hover {
-  color: #FFA500; /* Naranja más brillante al pasar el mouse */
+  color: #FFA500;
   text-shadow: 
     0 0 30px rgba(255, 165, 0, 0.8),
     0 0 60px rgba(255, 165, 0, 0.6),
     0 0 90px rgba(255, 165, 0, 0.4);
 }
 
-/* Cursor blanco de 1px */
 .cursor-dot {
   position: fixed;
   width: 1px;
   height: 1px;
   background: white;
   border-radius: 50%;
-  pointer-events: none; /* No interfiere con hover ni clicks */
+  pointer-events: none;
   z-index: 9999;
 }
