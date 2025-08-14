@@ -1,27 +1,46 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [letterPositions, setLetterPositions] = useState([
-    { x: 0, y: 0 }, // C
-    { x: 0, y: 0 }, // A
-    { x: 0, y: 0 }, // R
-    { x: 0, y: 0 },  // L
-    { x: 0, y: 0 }, // O
-    { x: 0, y: 0 }, // T
-    { x: 0, y: 0 }  // A
-  ]);
+  const [letterPositions, setLetterPositions] = useState(
+    Array(7).fill({ x: 0, y: 0 }) // 7 letras para CARLOTA
+  );
   
   const [showTodoSection, setShowTodoSection] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [editingTask, setEditingTask] = useState(null);
+  const [editValue, setEditValue] = useState('');
   
-  const letterRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
+  const letterRefs = Array(7).fill().map(() => useRef());
   const todoSectionRef = useRef();
-  const letters = ['C','A','R','L','O','T','A'];
+  const letters = ['C', 'A', 'R', 'L', 'O', 'T', 'A'];
+
+  // Cargar tareas del localStorage al iniciar
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('carlota-tasks');
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  // Guardar tareas en localStorage cuando cambien
+  useEffect(() => {
+    if (tasks.length > 0) {
+      localStorage.setItem('carlota-tasks', JSON.stringify(tasks));
+      // Aquí se podría integrar con Google Sheets API
+      syncToGoogleSheets(tasks);
+    }
+  }, [tasks]);
+
+  const syncToGoogleSheets = async (tasksData) => {
+    // Placeholder para integración con Google Sheets
+    // Necesitarías configurar Google Sheets API
+    console.log('Sincronizando con Google Sheets:', tasksData);
+  };
 
   const handleMouseMove = (e, letterIndex) => {
-    if (showTodoSection) return; // No mover letras si estamos en la sección todo
+    if (showTodoSection) return;
     
     const letterElement = letterRefs[letterIndex].current;
     if (!letterElement) return;
@@ -61,9 +80,8 @@ function App() {
   };
 
   const handleLetterClick = (letter) => {
-    if (letter === 'C') { // Cambiamos a L porque no hay C en HOLA
+    if (letter === 'C') {
       setShowTodoSection(true);
-      // Scroll suave a la sección todo
       setTimeout(() => {
         todoSectionRef.current?.scrollIntoView({ 
           behavior: 'smooth',
@@ -78,27 +96,54 @@ function App() {
       const newTask = {
         id: Date.now(),
         text: inputValue.trim(),
-        completed: false
+        status: 'todo' // todo, ongoing, done
       };
       setTasks(prev => [...prev, newTask]);
       setInputValue('');
     }
   };
 
-  const toggleTask = (taskId) => {
+  const changeTaskStatus = (taskId, newStatus) => {
     setTasks(prev => prev.map(task => 
       task.id === taskId 
-        ? { ...task, completed: !task.completed }
+        ? { ...task, status: newStatus }
         : task
     ));
   };
 
-  const incompleteTasks = tasks.filter(task => !task.completed);
-  const completedTasks = tasks.filter(task => task.completed);
+  const deleteTask = (taskId) => {
+    setTasks(prev => prev.filter(task => task.id !== taskId));
+  };
+
+  const startEditing = (task) => {
+    setEditingTask(task.id);
+    setEditValue(task.text);
+  };
+
+  const saveEdit = (taskId) => {
+    if (editValue.trim()) {
+      setTasks(prev => prev.map(task => 
+        task.id === taskId 
+          ? { ...task, text: editValue.trim() }
+          : task
+      ));
+    }
+    setEditingTask(null);
+    setEditValue('');
+  };
+
+  const cancelEdit = () => {
+    setEditingTask(null);
+    setEditValue('');
+  };
+
+  const todoTasks = tasks.filter(task => task.status === 'todo');
+  const ongoingTasks = tasks.filter(task => task.status === 'ongoing');
+  const doneTasks = tasks.filter(task => task.status === 'done');
 
   return (
     <div className="App">
-      {/* Sección inicial - HOLA */}
+      {/* Sección inicial - CARLOTA */}
       <div className={`hero-section ${showTodoSection ? 'with-todo' : ''}`}>
         <div className="word-container" onMouseMove={(e) => {
           letters.forEach((_, index) => handleMouseMove(e, index));
@@ -126,58 +171,144 @@ function App() {
         <div className="todo-section" ref={todoSectionRef}>
           <div className="todo-container">
             <div className="todo-header">
-              <span className="todo-letter">L</span>
-              <input
-                type="text"
-                className="todo-input"
-                placeholder="Escribe una tarea y presiona Enter..."
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleInputSubmit}
-                autoFocus
-              />
+              <span className="todo-letter">C</span>
+              <h1 className="todo-title">osas por hacer</h1>
             </div>
             
+            <input
+              type="text"
+              className="todo-input"
+              placeholder="Escribe una tarea y presiona Enter..."
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleInputSubmit}
+              autoFocus
+            />
+            
             <div className="tasks-container">
-              {/* Tareas incompletas */}
-              {incompleteTasks.length > 0 && (
-                <div className="tasks-section">
-                  <h3>Por hacer</h3>
-                  {incompleteTasks.map(task => (
-                    <div key={task.id} className="task-item incomplete">
-                      <input
-                        type="checkbox"
-                        checked={task.completed}
-                        onChange={() => toggleTask(task.id)}
-                        className="task-checkbox"
-                      />
-                      <span className="task-text">{task.text}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Tareas Por Hacer */}
+              <div className="tasks-section">
+                <h3>Por hacer ({todoTasks.length})</h3>
+                {todoTasks.map(task => (
+                  <TaskItem 
+                    key={task.id} 
+                    task={task} 
+                    editingTask={editingTask}
+                    editValue={editValue}
+                    setEditValue={setEditValue}
+                    onStatusChange={changeTaskStatus}
+                    onDelete={deleteTask}
+                    onStartEdit={startEditing}
+                    onSaveEdit={saveEdit}
+                    onCancelEdit={cancelEdit}
+                  />
+                ))}
+              </div>
 
-              {/* Tareas completadas */}
-              {completedTasks.length > 0 && (
-                <div className="tasks-section">
-                  <h3>Completadas</h3>
-                  {completedTasks.map(task => (
-                    <div key={task.id} className="task-item completed">
-                      <input
-                        type="checkbox"
-                        checked={task.completed}
-                        onChange={() => toggleTask(task.id)}
-                        className="task-checkbox"
-                      />
-                      <span className="task-text">{task.text}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Tareas En Proceso */}
+              <div className="tasks-section">
+                <h3>En proceso ({ongoingTasks.length})</h3>
+                {ongoingTasks.map(task => (
+                  <TaskItem 
+                    key={task.id} 
+                    task={task} 
+                    editingTask={editingTask}
+                    editValue={editValue}
+                    setEditValue={setEditValue}
+                    onStatusChange={changeTaskStatus}
+                    onDelete={deleteTask}
+                    onStartEdit={startEditing}
+                    onSaveEdit={saveEdit}
+                    onCancelEdit={cancelEdit}
+                  />
+                ))}
+              </div>
+
+              {/* Tareas Completadas */}
+              <div className="tasks-section">
+                <h3>Completadas ({doneTasks.length})</h3>
+                {doneTasks.map(task => (
+                  <TaskItem 
+                    key={task.id} 
+                    task={task} 
+                    editingTask={editingTask}
+                    editValue={editValue}
+                    setEditValue={setEditValue}
+                    onStatusChange={changeTaskStatus}
+                    onDelete={deleteTask}
+                    onStartEdit={startEditing}
+                    onSaveEdit={saveEdit}
+                    onCancelEdit={cancelEdit}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Componente para cada tarea individual
+function TaskItem({ 
+  task, 
+  editingTask, 
+  editValue, 
+  setEditValue,
+  onStatusChange, 
+  onDelete, 
+  onStartEdit, 
+  onSaveEdit, 
+  onCancelEdit 
+}) {
+  const isEditing = editingTask === task.id;
+
+  return (
+    <div className={`task-item ${task.status}`}>
+      <div className="task-content">
+        {isEditing ? (
+          <input
+            type="text"
+            className="task-edit-input"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') onSaveEdit(task.id);
+              if (e.key === 'Escape') onCancelEdit();
+            }}
+            onBlur={() => onSaveEdit(task.id)}
+            autoFocus
+          />
+        ) : (
+          <span 
+            className="task-text" 
+            onDoubleClick={() => onStartEdit(task)}
+          >
+            {task.text}
+          </span>
+        )}
+      </div>
+      
+      <div className="task-actions">
+        <select 
+          className="status-select"
+          value={task.status} 
+          onChange={(e) => onStatusChange(task.id, e.target.value)}
+        >
+          <option value="todo">Por hacer</option>
+          <option value="ongoing">En proceso</option>
+          <option value="done">Completada</option>
+        </select>
+        
+        <button 
+          className="delete-btn"
+          onClick={() => onDelete(task.id)}
+          title="Eliminar tarea"
+        >
+          🗑️
+        </button>
+      </div>
     </div>
   );
 }
