@@ -1,12 +1,12 @@
+
 import React, { useState, useRef } from 'react';
 import './App.css';
+import BlurText from './BlurText'; // Importa el componente BlurText
 
 function App() {
   // --------------------------
   // 1️⃣ Estado: posición de cada letra
   // --------------------------
-  // Cada letra tiene una posición x,y que se actualiza cuando el cursor se acerca
-  // Inicialmente todas las letras están en {x:0, y:0} (posición original)
   const [letterPositions, setLetterPositions] = useState([
     { x: 0, y: 0 }, // C
     { x: 0, y: 0 }, // A
@@ -20,7 +20,6 @@ function App() {
   // --------------------------
   // 2️⃣ Refs: referencias a cada letra
   // --------------------------
-  // useRef nos permite acceder al elemento DOM de cada letra para calcular su posición
   const letterRefs = [
     useRef(), useRef(), useRef(), useRef(),
     useRef(), useRef(), useRef()
@@ -29,7 +28,6 @@ function App() {
   // --------------------------
   // 3️⃣ Letras a mostrar
   // --------------------------
-  // Cambia este array para modificar el texto que aparece
   const letters = ['C', 'A', 'R', 'L', 'O', 'T', 'A'];
 
   // --------------------------
@@ -37,7 +35,7 @@ function App() {
   // --------------------------
   const handleMouseMove = (e, letterIndex) => {
     const letterElement = letterRefs[letterIndex].current;
-    if (!letterElement) return; // Si el elemento no existe, salir
+    if (!letterElement) return;
 
     const rect = letterElement.getBoundingClientRect();
     const letterCenterX = rect.left + rect.width / 2;
@@ -46,18 +44,15 @@ function App() {
     const mouseX = e.clientX;
     const mouseY = e.clientY;
 
-    // Calcular distancia entre el cursor y el centro de la letra
     const deltaX = mouseX - letterCenterX;
     const deltaY = mouseY - letterCenterY;
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-    // Si el cursor está cerca (menos de 150px), mover la letra
     if (distance < 150) {
-      const force = (150 - distance) / 150; // Más cerca = más fuerza
-      const moveX = -deltaX * force * 0.8;  // Mover en dirección opuesta
+      const force = (150 - distance) / 150;
+      const moveX = -deltaX * force * 0.8;
       const moveY = -deltaY * force * 0.8;
 
-      // Actualiza el estado para que React re-renderice la letra en la nueva posición
       setLetterPositions(prev => {
         const newPositions = [...prev];
         newPositions[letterIndex] = { x: moveX, y: moveY };
@@ -72,36 +67,44 @@ function App() {
   const handleMouseLeave = (letterIndex) => {
     setLetterPositions(prev => {
       const newPositions = [...prev];
-      newPositions[letterIndex] = { x: 0, y: 0 }; // Posición original
+      newPositions[letterIndex] = { x: 0, y: 0 };
       return newPositions;
     });
   };
 
   // --------------------------
-  // 6️⃣ Renderizado
+  // 6️⃣ Callback BlurText
+  // --------------------------
+  const handleAnimationComplete = () => {
+    console.log('Animation completed!');
+  };
+
+  // --------------------------
+  // 7️⃣ Renderizado
   // --------------------------
   return (
     <div
       className="App"
       onMouseMove={(e) => {
-        // Cada vez que muevo el mouse, reviso todas las letras
         letters.forEach((_, index) => handleMouseMove(e, index));
       }}
     >
       <div className="word-container">
         {letters.map((letter, index) => (
-          <span
-            key={index}                 // Identificador único para cada letra
-            ref={letterRefs[index]}      // Referencia al DOM
-            className="letter"           // Clase CSS para estilo
+          <BlurText
+            key={index}
+            text={letter}                    // Cada letra individual
+            delay={index * 150}              // Retardo progresivo para efecto cascada
+            animateBy="letters"
+            direction="top"
+            onAnimationComplete={handleAnimationComplete}
+            className="letter"
+            ref={letterRefs[index]}           // Referencia para movimiento del cursor
             style={{
-              transform: `translate(${letterPositions[index].x}px, ${letterPositions[index].y}px)`, // Posición dinámica
-              transition: 'transform 0.3s ease-out' // Animación suave al moverse
+              transform: `translate(${letterPositions[index].x}px, ${letterPositions[index].y}px)`,
+              transition: 'transform 0.3s ease-out'
             }}
-            onMouseLeave={() => handleMouseLeave(index)} // Cuando el cursor se aleja
-          >
-            {letter} 
-          </span>
+          />
         ))}
       </div>
     </div>
