@@ -21,14 +21,14 @@ body {
 
 .word-container {
   display: flex;
-  gap: 40px;
+  gap: 20px;
 }
 
 .letter {
   color: #FF6F00;
-  font-size: 15rem;
+  font-size: 10rem;
   font-weight: bold;
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Jua', sans-serif;
   display: inline-block;
   user-select: none;
   text-shadow: 
