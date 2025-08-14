@@ -14,7 +14,7 @@ function App() {
   const [editValue, setEditValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
-  const letterRefs = Array(7).fill().map(() => useRef());
+  const letterRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
   const todoSectionRef = useRef();
   const letters = ['C', 'A', 'R', 'L', 'O', 'T', 'A'];
 
