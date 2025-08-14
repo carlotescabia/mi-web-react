@@ -45,7 +45,7 @@ body {
 */
 .word-container {
   display: flex;
-  gap: 40px; /* Espacio entre letras, cambia este valor para separarlas más o menos */
+  gap: 20px; /* Espacio entre letras, cambia este valor para separarlas más o menos */
 }
 
 /* --------------------------
