@@ -15,7 +15,7 @@ body {
   min-height: 100vh;
 }
 
-/* Sección Hero - HOLA */
+/* Sección Hero - CARLOTA */
 .hero-section {
   min-height: 100vh;
   background: #002FA7; /* Azul Klein base */
@@ -75,29 +75,41 @@ body {
 }
 
 .todo-container {
-  max-width: 800px;
+  max-width: 1000px;
   width: 100%;
 }
 
 .todo-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   margin-bottom: 40px;
-  gap: 30px;
+  gap: 10px;
 }
 
 .todo-letter {
   color: white;
-  font-size: 4rem;
+  font-size: 8rem;
   font-weight: bold;
   text-shadow: 
     0 0 20px rgba(255, 255, 255, 0.6),
     0 0 40px rgba(255, 255, 255, 0.4);
   flex-shrink: 0;
+  line-height: 1;
+}
+
+.todo-title {
+  color: white;
+  font-size: 8rem;
+  font-weight: bold;
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.6),
+    0 0 40px rgba(255, 255, 255, 0.4);
+  line-height: 1;
+  margin: 0;
 }
 
 .todo-input {
-  flex: 1;
+  width: 100%;
   padding: 20px 25px;
   font-size: 1.2rem;
   border: none;
@@ -108,6 +120,7 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.2);
   outline: none;
   transition: all 0.3s ease;
+  margin-bottom: 40px;
 }
 
 .todo-input::placeholder {
@@ -121,24 +134,28 @@ body {
 }
 
 .tasks-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 30px;
 }
 
 .tasks-section h3 {
   color: white;
   font-size: 1.5rem;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   opacity: 0.9;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .task-item {
   display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 15px 20px;
-  margin-bottom: 10px;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   backdrop-filter: blur(10px);
@@ -149,30 +166,90 @@ body {
 .task-item:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
-.task-item.completed {
-  background: rgba(255, 255, 255, 0.05);
-  opacity: 0.7;
+.task-item.todo {
+  border-left: 4px solid #FF6B6B;
 }
 
-.task-checkbox {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  accent-color: #FF8C00;
+.task-item.ongoing {
+  border-left: 4px solid #FFD93D;
+}
+
+.task-item.done {
+  border-left: 4px solid #6BCF7F;
+  opacity: 0.8;
+}
+
+.task-content {
+  flex: 1;
 }
 
 .task-text {
-  flex: 1;
   font-size: 1.1rem;
   color: white;
+  cursor: pointer;
   transition: all 0.3s ease;
+  line-height: 1.4;
 }
 
-.task-item.completed .task-text {
+.task-item.done .task-text {
   text-decoration: line-through;
-  color: #888;
+  color: #bbb;
+}
+
+.task-edit-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  outline: none;
+  border: 2px solid rgba(255, 140, 0, 0.5);
+}
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-select {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.status-select option {
+  background: #001a5c;
+  color: white;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  background: rgba(255, 107, 107, 0.2);
+  transform: scale(1.1);
 }
 
 /* Scroll suave */
@@ -181,28 +258,40 @@ html {
 }
 
 /* Responsivo */
+@media (max-width: 1200px) {
+  .tasks-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 768px) {
-  .letter {
+  .letter, .todo-letter, .todo-title {
     font-size: 4rem;
   }
   
   .word-container {
-    gap: 10px;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   
   .todo-header {
     flex-direction: column;
-    align-items: stretch;
-    gap: 20px;
-  }
-  
-  .todo-letter {
-    font-size: 3rem;
-    text-align: center;
+    align-items: center;
+    gap: 0;
   }
   
   .todo-input {
     font-size: 1rem;
     padding: 15px 20px;
+  }
+  
+  .tasks-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .task-item {
+    padding: 15px;
   }
 }
