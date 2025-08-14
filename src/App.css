@@ -8,7 +8,8 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Evita scroll cuando las letras se muevan */
+  overflow: hidden; /* Evita scroll */
+  cursor: none; /* Oculta el cursor real */
 }
 
 .App {
@@ -19,33 +20,42 @@ body {
   align-items: center;
   margin: 0;
   padding: 0;
-  cursor: none; /* Oculta el cursor para un efecto más limpio */
 }
 
 .word-container {
   display: flex;
-  gap: 20px; /* Espacio entre letras */
+  gap: 40px; /* Espacio entre letras */
 }
 
 .letter {
   color: #FF6F00; /* Naranja brillante */
-  font-size: 8rem;
+  font-size: 20rem; /* Más grande */
   font-weight: bold;
-  font-family: 'Fredoka One', sans-serif; /* Cambia a tu favorita */
+  font-family: 'Fredoka One', sans-serif; /* Fuente divertida */
   display: inline-block;
-  cursor: pointer;
   user-select: none;
   text-shadow: 
     0 0 20px rgba(255, 111, 0, 0.6),
     0 0 40px rgba(255, 111, 0, 0.4),
     0 0 60px rgba(255, 111, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
-
 .letter:hover {
-  color: #FFA500; /* Color más brillante en hover */
+  color: #FFA500; /* Más brillante en hover */
   text-shadow: 
     0 0 30px rgba(255, 165, 0, 0.8),
     0 0 60px rgba(255, 165, 0, 0.6),
     0 0 90px rgba(255, 165, 0, 0.4);
+}
+
+/* Cursor blanco de 1px */
+.cursor-dot {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
 }
