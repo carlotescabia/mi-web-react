@@ -30,9 +30,9 @@ function App() {
     
     // Si el cursor está cerca (menos de 150px), mover la letra
     if (distance < 150) {
-      const force = (150 - distance) / 150; // Fuerza inversamente proporcional a la distancia
-      const moveX = -deltaX * force * 0.8; // Mover en dirección opuesta al cursor
-      const moveY = -deltaY * force * 0.8;
+      const force = (150 - distance) / 250; // Fuerza inversamente proporcional a la distancia
+      const moveX = -deltaX * force * 1.4; // Mover en dirección opuesta al cursor
+      const moveY = -deltaY * force * 1.0;
       
       setLetterPositions(prev => {
         const newPositions = [...prev];
