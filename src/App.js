@@ -3,14 +3,17 @@ import './App.css';
 
 function App() {
   const [letterPositions, setLetterPositions] = useState([
-    { x: 0, y: 0 }, // H
+    { x: 0, y: 0 }, // C
+    { x: 0, y: 0 }, // A
+    { x: 0, y: 0 }, // R
+    { x: 0, y: 0 }  // L
     { x: 0, y: 0 }, // O
-    { x: 0, y: 0 }, // L
-    { x: 0, y: 0 }  // A
+    { x: 0, y: 0 }, // T
+    { x: 0, y: 0 }  //A
   ]);
   
   const letterRefs = [useRef(), useRef(), useRef(), useRef()];
-  const letters = ['H', 'O', 'L', 'A'];
+  const letters = ['C', 'A', 'R', 'L', 'O', 'T', 'A'];
 
   const handleMouseMove = (e, letterIndex) => {
     const letterElement = letterRefs[letterIndex].current;
