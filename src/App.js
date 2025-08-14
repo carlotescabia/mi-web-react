@@ -100,7 +100,7 @@ function App() {
             }}
             onMouseLeave={() => handleMouseLeave(index)} // Cuando el cursor se aleja
           >
-            {letter} // Contenido de la letra
+            {letter} 
           </span>
         ))}
       </div>
