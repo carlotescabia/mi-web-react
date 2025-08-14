@@ -3,9 +3,12 @@ import './App.css';
 
 function App() {
   const [letterPositions, setLetterPositions] = useState([
-    { x: 0, y: 0 }, // H
+    { x: 0, y: 0 }, // C
+    { x: 0, y: 0 }, // A
+    { x: 0, y: 0 }, // R
+    { x: 0, y: 0 }  // L
     { x: 0, y: 0 }, // O
-    { x: 0, y: 0 }, // L
+    { x: 0, y: 0 }, // T
     { x: 0, y: 0 }  // A
   ]);
   
@@ -13,9 +16,9 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [inputValue, setInputValue] = useState('');
   
-  const letterRefs = [useRef(), useRef(), useRef(), useRef()];
+  const letterRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
   const todoSectionRef = useRef();
-  const letters = ['H', 'O', 'L', 'A'];
+  const letters = ['C','A','R','L','O','T','A'];
 
   const handleMouseMove = (e, letterIndex) => {
     if (showTodoSection) return; // No mover letras si estamos en la sección todo
