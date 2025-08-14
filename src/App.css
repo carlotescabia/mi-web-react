@@ -1,10 +1,21 @@
-/* Reset básico */
+/* --------------------------
+   1️⃣ Reset básico
+   --------------------------
+   Quita márgenes y paddings por defecto de todos los elementos
+   y establece el box-sizing para que padding y border se incluyan en el tamaño.
+*/
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* --------------------------
+   2️⃣ Body
+   --------------------------
+   Evita scroll si las letras se mueven fuera de pantalla.
+   cursor: none oculta el cursor real para usar un cursor personalizado.
+*/
 body {
   margin: 0;
   padding: 0;
@@ -12,50 +23,74 @@ body {
   cursor: none; /* Oculta el cursor real */
 }
 
+/* --------------------------
+   3️⃣ Contenedor principal (.App)
+   --------------------------
+   Ocupa toda la altura de la pantalla y centra las letras en vertical y horizontal.
+*/
 .App {
-  min-height: 100vh;
-  background-color: #002FA7; /* Azul Klein */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 100vh; /* 100% de la altura de la ventana */
+  background-color: #002FA7; /* Azul Klein de fondo */
+  display: flex; /* Flexbox para centrar contenido */
+  justify-content: center; /* Centrado horizontal */
+  align-items: center;     /* Centrado vertical */
   margin: 0;
   padding: 0;
 }
 
+/* --------------------------
+   4️⃣ Contenedor de las letras
+   --------------------------
+   Flexbox para poner todas las letras en línea con un espacio entre ellas.
+*/
 .word-container {
   display: flex;
-  gap: 40px; /* Espacio entre letras */
+  gap: 40px; /* Espacio entre letras, cambia este valor para separarlas más o menos */
 }
 
+/* --------------------------
+   5️⃣ Letras individuales
+   --------------------------
+   Estilo visual de cada letra.
+*/
 .letter {
-  color: #FF6F00; /* Naranja brillante */
-  font-size: 20rem; /* Más grande */
-  font-weight: bold;
-  font-family: 'Fredoka One', sans-serif; /* Fuente divertida */
-  display: inline-block;
-  user-select: none;
+  color: #FF6F00; /* Naranja brillante, puedes cambiar el color */
+  font-size: 20rem; /* Tamaño de letra gigante, modifica para más pequeño o grande */
+  font-weight: bold; /* Negrita */
+  font-family: 'Fredoka One', sans-serif; /* Fuente divertida, cambia por otra si quieres */
+  display: inline-block; /* Para poder aplicar transformaciones individuales */
+  user-select: none; /* Evita que el usuario seleccione el texto */
   text-shadow: 
     0 0 20px rgba(255, 111, 0, 0.6),
     0 0 40px rgba(255, 111, 0, 0.4),
-    0 0 60px rgba(255, 111, 0, 0.2);
-  transition: all 0.3s ease;
+    0 0 60px rgba(255, 111, 0, 0.2); /* Efecto de brillo/halo */
+  transition: all 0.3s ease; /* Animación suave de cambios de color o transformaciones */
 }
 
+/* --------------------------
+   6️⃣ Efecto hover sobre las letras
+   --------------------------
+   Cambia el color y la sombra cuando el cursor pasa por encima
+*/
 .letter:hover {
-  color: #FFA500; /* Más brillante en hover */
+  color: #FFA500; /* Más brillante al pasar el mouse */
   text-shadow: 
     0 0 30px rgba(255, 165, 0, 0.8),
     0 0 60px rgba(255, 165, 0, 0.6),
-    0 0 90px rgba(255, 165, 0, 0.4);
+    0 0 90px rgba(255, 165, 0, 0.4); /* Brillo más intenso */
 }
 
-/* Cursor blanco de 1px */
+/* --------------------------
+   7️⃣ Cursor personalizado: punto blanco de 1px
+   --------------------------
+   Este div se mueve siguiendo el mouse.
+*/
 .cursor-dot {
-  position: fixed;
-  width: 1px;
+  position: fixed; /* Fijo en la ventana, no se mueve con scroll */
+  width: 1px;      /* Tamaño 1px */
   height: 1px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
+  background: white; /* Color del punto, puedes cambiarlo */
+  border-radius: 50%; /* Circular */
+  pointer-events: none; /* No interfiere con clicks o hover */
+  z-index: 9999; /* Siempre encima de todo */
 }
