@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
+import { GOOGLE_SHEETS_CONFIG } from './config';
 
 function App() {
   const [letterPositions, setLetterPositions] = useState(
@@ -11,34 +12,116 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [editingTask, setEditingTask] = useState(null);
   const [editValue, setEditValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   
   const letterRefs = Array(7).fill().map(() => useRef());
   const todoSectionRef = useRef();
   const letters = ['C', 'A', 'R', 'L', 'O', 'T', 'A'];
 
-  // Cargar tareas del localStorage al iniciar
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('carlota-tasks');
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
+  // 🔥 FUNCIONES DE GOOGLE SHEETS
+  const readFromGoogleSheets = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEETS_CONFIG.SPREADSHEET_ID}/values/${GOOGLE_SHEETS_CONFIG.RANGE}?key=${GOOGLE_SHEETS_CONFIG.API_KEY}`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.values && data.values.length > 1) {
+        return data.values.slice(1).map((row, index) => ({
+          id: parseInt(row[0]) || Date.now() + index,
+          text: row[1] || '',
+          status: row[2] || 'todo',
+          date: row[3] || new Date().toISOString()
+        }));
+      }
+      return [];
+    } catch (error) {
+      console.error('Error reading from Google Sheets:', error);
+      return [];
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
-
-  // Guardar tareas en localStorage cuando cambien
-  useEffect(() => {
-    if (tasks.length > 0) {
-      localStorage.setItem('carlota-tasks', JSON.stringify(tasks));
-      // Aquí se podría integrar con Google Sheets API
-      syncToGoogleSheets(tasks);
-    }
-  }, [tasks]);
-
-  const syncToGoogleSheets = async (tasksData) => {
-    // Placeholder para integración con Google Sheets
-    // Necesitarías configurar Google Sheets API
-    console.log('Sincronizando con Google Sheets:', tasksData);
   };
 
+  const writeToGoogleSheets = async (tasks) => {
+    try {
+      const values = [
+        ['ID', 'Texto', 'Estado', 'Fecha'],
+        ...tasks.map(task => [
+          task.id,
+          task.text,
+          task.status,
+          task.date || new Date().toISOString()
+        ])
+      ];
+
+      const response = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEETS_CONFIG.SPREADSHEET_ID}/values/${GOOGLE_SHEETS_CONFIG.RANGE}?valueInputOption=RAW&key=${GOOGLE_SHEETS_CONFIG.API_KEY}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ values })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      console.log('✅ Datos guardados en Google Sheets');
+      return true;
+    } catch (error) {
+      console.error('❌ Error escribiendo a Google Sheets:', error);
+      return false;
+    }
+  };
+
+  // 🔥 USEEFFECTS - AQUÍ ESTÁN UBICADOS
+  // Cargar tareas al iniciar (Google Sheets primero, luego localStorage)
+  useEffect(() => {
+    const loadTasks = async () => {
+      console.log('🔄 Cargando tareas...');
+      
+      // Intentar cargar desde Google Sheets
+      const sheetsTasks = await readFromGoogleSheets();
+      
+      if (sheetsTasks.length > 0) {
+        console.log('✅ Tareas cargadas desde Google Sheets:', sheetsTasks.length);
+        setTasks(sheetsTasks);
+      } else {
+        // Fallback a localStorage
+        const savedTasks = localStorage.getItem('carlota-tasks');
+        if (savedTasks) {
+          const localTasks = JSON.parse(savedTasks);
+          console.log('📱 Tareas cargadas desde localStorage:', localTasks.length);
+          setTasks(localTasks);
+        }
+      }
+    };
+    
+    loadTasks();
+  }, []); // Se ejecuta una sola vez al cargar
+
+  // Guardar tareas cuando cambien (localStorage + Google Sheets)
+  useEffect(() => {
+    if (tasks.length > 0) {
+      // Guardar en localStorage (inmediato)
+      localStorage.setItem('carlota-tasks', JSON.stringify(tasks));
+      
+      // Sincronizar con Google Sheets (en background)
+      writeToGoogleSheets(tasks);
+    }
+  }, [tasks]); // Se ejecuta cada vez que cambia 'tasks'
+
+  // 🔥 FUNCIONES DE INTERACCIÓN
   const handleMouseMove = (e, letterIndex) => {
     if (showTodoSection) return;
     
@@ -96,7 +179,8 @@ function App() {
       const newTask = {
         id: Date.now(),
         text: inputValue.trim(),
-        status: 'todo' // todo, ongoing, done
+        status: 'todo',
+        date: new Date().toISOString()
       };
       setTasks(prev => [...prev, newTask]);
       setInputValue('');
@@ -106,7 +190,7 @@ function App() {
   const changeTaskStatus = (taskId, newStatus) => {
     setTasks(prev => prev.map(task => 
       task.id === taskId 
-        ? { ...task, status: newStatus }
+        ? { ...task, status: newStatus, date: new Date().toISOString() }
         : task
     ));
   };
@@ -124,7 +208,7 @@ function App() {
     if (editValue.trim()) {
       setTasks(prev => prev.map(task => 
         task.id === taskId 
-          ? { ...task, text: editValue.trim() }
+          ? { ...task, text: editValue.trim(), date: new Date().toISOString() }
           : task
       ));
     }
@@ -137,6 +221,7 @@ function App() {
     setEditValue('');
   };
 
+  // Filtrar tareas por estado
   const todoTasks = tasks.filter(task => task.status === 'todo');
   const ongoingTasks = tasks.filter(task => task.status === 'ongoing');
   const doneTasks = tasks.filter(task => task.status === 'done');
@@ -173,6 +258,7 @@ function App() {
             <div className="todo-header">
               <span className="todo-letter">C</span>
               <h1 className="todo-title">osas por hacer</h1>
+              {isLoading && <div className="loading">🔄 Sincronizando...</div>}
             </div>
             
             <input
@@ -284,6 +370,7 @@ function TaskItem({
           <span 
             className="task-text" 
             onDoubleClick={() => onStartEdit(task)}
+            title="Doble click para editar"
           >
             {task.text}
           </span>
