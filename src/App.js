@@ -61,7 +61,7 @@ function App() {
   };
 
   const handleLetterClick = (letter) => {
-    if (letter === 'L') { // Cambiamos a L porque no hay C en HOLA
+    if (letter === 'C') { // Cambiamos a L porque no hay C en HOLA
       setShowTodoSection(true);
       // Scroll suave a la sección todo
       setTimeout(() => {
