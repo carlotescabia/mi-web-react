@@ -1,3 +1,4 @@
+/* Reset básico */
 * {
   margin: 0;
   padding: 0;
@@ -7,16 +8,26 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  cursor: none;
-  background-color: #002FA7;
+  font-family: Arial, sans-serif;
 }
 
 .App {
-  min-height: 80vh;
+  min-height: 100vh;
+}
+
+/* Sección Hero - HOLA */
+.hero-section {
+  min-height: 100vh;
+  background: #002FA7; /* Azul Klein base */
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: none;
+  transition: background 0.8s ease;
+}
+
+.hero-section.with-todo {
+  background: linear-gradient(180deg, #002FA7 0%, #001a5c 100%);
 }
 
 .word-container {
@@ -25,17 +36,18 @@ body {
 }
 
 .letter {
-  color: #FF6F00;
-  font-size: 10rem;
+  color: #FF8C00; /* Tangerine */
+  font-size: 8rem;
   font-weight: bold;
   font-family: Arial, sans-serif;
   display: inline-block;
+  cursor: pointer;
   user-select: none;
   text-shadow: 
-    0 0 20px rgba(255, 111, 0, 0.6),
-    0 0 40px rgba(255, 111, 0, 0.4),
-    0 0 60px rgba(255, 111, 0, 0.2);
-  transition: all 0.3s ease;
+    0 0 20px rgba(255, 140, 0, 0.6),
+    0 0 40px rgba(255, 140, 0, 0.4),
+    0 0 60px rgba(255, 140, 0, 0.2);
+  transition: all 0.5s ease;
 }
 
 .letter:hover {
@@ -46,12 +58,151 @@ body {
     0 0 90px rgba(255, 165, 0, 0.4);
 }
 
-.cursor-dot {
-  position: fixed;
-  width: 1px;
-  height: 1px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
+.letter.active-letter {
+  color: white !important;
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.6),
+    0 0 40px rgba(255, 255, 255, 0.4);
+}
+
+/* Sección Todo List */
+.todo-section {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #001a5c 0%, #000d2e 100%);
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.todo-container {
+  max-width: 800px;
+  width: 100%;
+}
+
+.todo-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+  gap: 30px;
+}
+
+.todo-letter {
+  color: white;
+  font-size: 4rem;
+  font-weight: bold;
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.6),
+    0 0 40px rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 20px 25px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.todo-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.todo-input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 140, 0, 0.5);
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+}
+
+.tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.tasks-section h3 {
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.task-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.task-item.completed {
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 0.7;
+}
+
+.task-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #FF8C00;
+}
+
+.task-text {
+  flex: 1;
+  font-size: 1.1rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: #888;
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .letter {
+    font-size: 4rem;
+  }
+  
+  .word-container {
+    gap: 10px;
+  }
+  
+  .todo-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+  
+  .todo-letter {
+    font-size: 3rem;
+    text-align: center;
+  }
+  
+  .todo-input {
+    font-size: 1rem;
+    padding: 15px 20px;
+  }
 }
