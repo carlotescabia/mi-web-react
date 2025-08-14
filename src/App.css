@@ -1,0 +1,30 @@
+.App {
+  min-height: 100vh;
+  background-color: #002FA7; /* Azul Klein */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.App h1 {
+  color: #FFA500; /* Naranja */
+  font-size: 8rem;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
