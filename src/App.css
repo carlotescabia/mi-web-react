@@ -55,7 +55,7 @@ body {
 */
 .letter {
   color: #FF6F00; /* Naranja brillante, puedes cambiar el color */
-  font-size: 20rem; /* Tamaño de letra gigante, modifica para más pequeño o grande */
+  font-size: 10rem; /* Tamaño de letra gigante, modifica para más pequeño o grande */
   font-weight: bold; /* Negrita */
   font-family: 'Fredoka One', sans-serif; /* Fuente divertida, cambia por otra si quieres */
   display: inline-block; /* Para poder aplicar transformaciones individuales */
