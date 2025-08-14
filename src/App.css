@@ -108,6 +108,13 @@ body {
   margin: 0;
 }
 
+.loading {
+  color: #FFD93D;
+  font-size: 1rem;
+  margin-left: 20px;
+  opacity: 0.8;
+}
+
 .todo-input {
   width: 100%;
   padding: 20px 25px;
