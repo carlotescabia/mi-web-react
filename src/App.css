@@ -93,7 +93,7 @@ function App() {
           <BlurText
             key={index}
             text={letter}                    // Cada letra individual
-            delay={index * 150}              // Retardo progresivo para efecto cascada
+            delay={index * 150}              // Retardo progresivo
             animateBy="letters"
             direction="top"
             onAnimationComplete={handleAnimationComplete}
@@ -103,6 +103,7 @@ function App() {
               transform: `translate(${letterPositions[index].x}px, ${letterPositions[index].y}px)`,
               transition: 'transform 0.3s ease-out'
             }}
+            threshold={0}                     // Animación siempre al entrar
           />
         ))}
       </div>
