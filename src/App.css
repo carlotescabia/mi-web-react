@@ -28,18 +28,19 @@ body {
 }
 
 .letter {
-  color: #FF8C00; /* Tangerine/Dark Orange */
+  color: #FF6F00; /* Naranja brillante */
   font-size: 8rem;
   font-weight: bold;
-  font-family: Arial, sans-serif;
+  font-family: 'Fredoka One', sans-serif; /* Cambia a tu favorita */
   display: inline-block;
   cursor: pointer;
-  user-select: none; /* Evita selección de texto */
+  user-select: none;
   text-shadow: 
-    0 0 20px rgba(255, 140, 0, 0.6),
-    0 0 40px rgba(255, 140, 0, 0.4),
-    0 0 60px rgba(255, 140, 0, 0.2); /* Efecto de brillo */
+    0 0 20px rgba(255, 111, 0, 0.6),
+    0 0 40px rgba(255, 111, 0, 0.4),
+    0 0 60px rgba(255, 111, 0, 0.2);
 }
+
 
 .letter:hover {
   color: #FFA500; /* Color más brillante en hover */
