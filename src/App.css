@@ -1,4 +1,6 @@
-/* Reset básico */
+/* =====================
+   Reset básico
+   ===================== */
 * {
   margin: 0;
   padding: 0;
@@ -6,19 +8,15 @@
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: Arial, sans-serif;
 }
 
-.App {
-  min-height: 100vh;
-}
-
-/* Sección Hero - CARLOTA */
+/* =====================
+   HERO PAGE - CARLOTA
+   ===================== */
 .hero-section {
   min-height: 100vh;
-  background: #002FA7; /* Azul Klein base */
+  background: #002FA7; /* Azul Klein */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,20 +24,17 @@ body {
   transition: background 0.8s ease;
 }
 
-.hero-section.with-todo {
-  background: linear-gradient(180deg, #002FA7 0%, #001a5c 100%);
-}
-
+/* Contenedor de letras */
 .word-container {
   display: flex;
   gap: 20px;
 }
 
+/* Letras individuales */
 .letter {
   color: #FF8C00; /* Tangerine */
   font-size: 8rem;
   font-weight: bold;
-  font-family: Arial, sans-serif;
   display: inline-block;
   cursor: pointer;
   user-select: none;
@@ -58,6 +53,7 @@ body {
     0 0 90px rgba(255, 165, 0, 0.4);
 }
 
+/* Letra activa (solo se usaba para C en la sección anterior) */
 .letter.active-letter {
   color: white !important;
   text-shadow: 
@@ -65,7 +61,9 @@ body {
     0 0 40px rgba(255, 255, 255, 0.4);
 }
 
-/* Sección Todo List */
+/* =====================
+   TODO PAGE
+   ===================== */
 .todo-section {
   min-height: 100vh;
   background: linear-gradient(180deg, #001a5c 0%, #000d2e 100%);
@@ -90,9 +88,7 @@ body {
   color: white;
   font-size: 3rem;
   font-weight: bold;
-  text-shadow: 
-    0 0 20px rgba(255, 255, 255, 0.6),
-    0 0 40px rgba(255, 255, 255, 0.4);
+  text-shadow: 0 0 20px rgba(255,255,255,0.6), 0 0 40px rgba(255,255,255,0.4);
   flex-shrink: 0;
   line-height: 1;
 }
@@ -101,9 +97,7 @@ body {
   color: white;
   font-size: 3rem;
   font-weight: bold;
-  text-shadow: 
-    0 0 20px rgba(255, 255, 255, 0.6),
-    0 0 40px rgba(255, 255, 255, 0.4);
+  text-shadow: 0 0 20px rgba(255,255,255,0.6), 0 0 40px rgba(255,255,255,0.4);
   line-height: 1;
   margin: 0;
 }
@@ -115,6 +109,7 @@ body {
   opacity: 0.8;
 }
 
+/* Input de nuevas tareas */
 .todo-input {
   width: 100%;
   padding: 20px 25px;
@@ -140,6 +135,7 @@ body {
   box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
 }
 
+/* Contenedor de tareas */
 .tasks-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -176,22 +172,11 @@ body {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
-.task-item.todo {
-  border-left: 4px solid #FF6B6B;
-}
+.task-item.todo { border-left: 4px solid #FF6B6B; }
+.task-item.ongoing { border-left: 4px solid #FFD93D; }
+.task-item.done { border-left: 4px solid #6BCF7F; opacity: 0.8; }
 
-.task-item.ongoing {
-  border-left: 4px solid #FFD93D;
-}
-
-.task-item.done {
-  border-left: 4px solid #6BCF7F;
-  opacity: 0.8;
-}
-
-.task-content {
-  flex: 1;
-}
+.task-content { flex: 1; }
 
 .task-text {
   font-size: 1.1rem;
@@ -201,10 +186,7 @@ body {
   line-height: 1.4;
 }
 
-.task-item.done .task-text {
-  text-decoration: line-through;
-  color: #bbb;
-}
+.task-item.done .task-text { text-decoration: line-through; color: #bbb; }
 
 .task-edit-input {
   width: 100%;
@@ -259,22 +241,20 @@ body {
   transform: scale(1.1);
 }
 
-/* Scroll suave */
-html {
-  scroll-behavior: smooth;
-}
+/* =====================
+   Scroll suave
+   ===================== */
+html { scroll-behavior: smooth; }
 
-/* Responsivo */
+/* =====================
+   Responsivo
+   ===================== */
 @media (max-width: 1200px) {
-  .tasks-container {
-    grid-template-columns: 1fr 1fr;
-  }
+  .tasks-container { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 768px) {
-  .letter, .todo-letter, .todo-title {
-    font-size: 4rem;
-  }
+  .letter, .todo-letter, .todo-title { font-size: 4rem; }
   
   .word-container {
     gap: 5px;
@@ -288,17 +268,8 @@ html {
     gap: 0;
   }
   
-  .todo-input {
-    font-size: 1rem;
-    padding: 15px 20px;
-  }
+  .todo-input { font-size: 1rem; padding: 15px 20px; }
   
-  .tasks-container {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .task-item {
-    padding: 15px;
-  }
+  .tasks-container { grid-template-columns: 1fr; gap: 20px; }
+  .task-item { padding: 15px; }
 }
