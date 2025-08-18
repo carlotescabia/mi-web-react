@@ -1,13 +1,14 @@
 {
-  "name": "portfolio-react",
+  "name": "carlota-web",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
-    "motion": "^10.12.0"
-    "react-router-dom": "^6.14.2"
+    "react-router-dom": "^6.14.2",
+    "framer-motion": "^10.12.0",
+    "axios": "^1.5.0" 
   },
   "scripts": {
     "start": "react-scripts start",
